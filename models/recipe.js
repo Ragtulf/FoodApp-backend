@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
+
+//Not working
 export const ingredientsSchema = new Schema({
   type: String
 })
