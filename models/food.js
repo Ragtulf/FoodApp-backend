@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 
 // Working model with arrays
-export const RecipeTest = mongoose.model('RecipeTest', {
+export const Recipe = mongoose.model('Recipe', {
   title: {
     type: String,
     required: true,
@@ -26,6 +26,5 @@ export const RecipeTest = mongoose.model('RecipeTest', {
   },
   tags: [{
       type: String,
-      minlength: 2
     }],
 })

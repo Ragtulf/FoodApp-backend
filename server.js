@@ -4,7 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 // import bcrypt from 'bcrypt-nodejs'
 // import { Recipe } from './models/recipe'
-import { RecipeTest } from './models/food'
+import { Recipe } from './models/food'
 
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/food-app"
@@ -31,31 +31,32 @@ app.get('/', (req, res) => {
 
 
 //Trying to create recipes
-
-// POST req not working
-app.post('/recipe', async (req, res) => {
-  const { title, ingredient } = req.body
-
-  try {
-    const recipe = await new Recipe({ title, ingredient }).save()
-    res.status(201).json(recipe)
-  } catch (err) {
-    res.status(400).json({ message: 'Did not work!' })
-  }
-})
-
-
 // New POST req - WORKING - rn only title and ingredients!
 app.post('/recipe', async (req, res) => {
   try {
-    const { title, ingredients } = req.body
-    const recipe = await new RecipeTest({ title, ingredients }).save()
+    const { title, shortDescription, ingredients, directions, image, tags } = req.body
+    const recipe = await new Recipe({
+      title,
+      shortDescription,
+      ingredients,
+      directions,
+      image,
+      tags
+    }).save()
     res.status(201).json(recipe)
   } catch (err) {
     res.status(400).json({ message: 'Did not work!', error: err.errors })
   }
 })
 
+app.get('/recipe', async (req, res) => {
+  try {
+    const recipes = await Recipe.find().exec()
+    res.json(recipes)
+  } catch (err) {
+    res.status(400).json({ message: "Not working!" })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
