@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 //Trying to create recipes
 // New POST req - WORKING - rn only title and ingredients!
-app.post('/recipe', async (req, res) => {
+app.post('/recipes', async (req, res) => {
   try {
     const { title, shortDescription, ingredients, directions, image, tags } = req.body
     const recipe = await new Recipe({
@@ -49,12 +49,22 @@ app.post('/recipe', async (req, res) => {
   }
 })
 
-app.get('/recipe', async (req, res) => {
+app.get('/recipes', async (req, res) => {
   try {
     const recipes = await Recipe.find().exec()
     res.json(recipes)
   } catch (err) {
     res.status(400).json({ message: "Not working!" })
+  }
+})
+
+app.get('/recipe/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const recipe = await Recipe.findById(id)
+    res.json(recipe)
+  } catch (err) {
+    res.status(400).json({ message: 'Does not work!'})
   }
 })
 

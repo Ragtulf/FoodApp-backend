@@ -17,6 +17,7 @@ export const Recipe = mongoose.model('Recipe', {
     }],
   directions: {
     type: String,
+    required: true,
   },
   time: {
     type: String,
