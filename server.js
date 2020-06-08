@@ -48,7 +48,21 @@ app.post('/signup', async (req, res) => {
   }
 })
 
+app.post('/login', async (req, res) => {
+  const user = await User.findOne({ userName: req.body.userName })
+  if (user && bcrypt.compareSync(req.body.password, user.password)) {
+    res.json({ userID: user._id, accessToken: user.accessToken })
+  } else {
+    res.status(400).json({ message: 'Could not find user' })
+  }
+})
 
+//Authenticated endpoint
+app.get('/secret', authenticateUser)
+
+app.get('/secret', (req, res) => {
+  res.json({ secret: "Welcome to the Secret!" })
+})
 
 
 
