@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 
-
 // Working model with arrays
 export const Recipe = mongoose.model('Recipe', {
   title: {

@@ -2,16 +2,25 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-// import bcrypt from 'bcrypt-nodejs'
-// import { Recipe } from './models/recipe'
+import bcrypt from 'bcrypt-nodejs'
 import { Recipe } from './models/food'
+import { User } from './models/users'
 
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/food-app"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+const authenticateUser = async (req, res, next) => {
+  const user = await User.findOne({ accessToken: req.header('Authorization')})
 
+  if (user) {
+    req.user = user
+    next()
+  } else {
+    res.status(403).json({ message: 'Access forbidden!' })
+  }
+}
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
 //
@@ -27,6 +36,21 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => {
   res.send('Our pretty Food App! 🍌')
 })
+
+app.post('/signup', async (req, res) => {
+  try {
+    const { userName, email, password } = req.body
+    const user = new User({ userName, email, password: bcrypt.hashSync(password)})
+    const savedUser = await user.save()
+    res.status(201).json({ id: savedUser._id, acesssToken: savedUser.accessToken })
+  } catch (err) {
+    res.status(400).json({ message: 'Could not create user', err: err.errors })
+  }
+})
+
+
+
+
 
 
 
