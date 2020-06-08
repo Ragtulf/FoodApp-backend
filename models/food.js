@@ -19,12 +19,12 @@ export const Recipe = mongoose.model('Recipe', {
     type: String,
     required: true,
   },
-  time: {
-    type: String,
-  },
-  image: {
-    type: String,
-  },
+  // time: {
+  //   type: String,
+  // },
+  // image: {
+  //   type: String,
+  // },
   tags: [{
       type: String,
     }],
