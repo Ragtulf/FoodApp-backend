@@ -26,5 +26,6 @@ export const Recipe = mongoose.model('Recipe', {
   // },
   tags: [{
       type: String,
+      reqired: true,
     }],
 })
