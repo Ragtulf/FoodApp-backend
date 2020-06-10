@@ -29,4 +29,12 @@ export const Recipe = mongoose.model('Recipe', {
       type: String,
       reqired: true,
     }],
+  createdAt: {
+    type: Date, 
+    default: Date.now,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }
 })

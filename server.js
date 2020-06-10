@@ -88,7 +88,7 @@ app.post('/recipes', async (req, res) => {
 
 app.get('/recipes', async (req, res) => {
   try {
-    const recipes = await Recipe.find().exec()
+    const recipes = await Recipe.find().sort({ createdAt:'desc' }).exec()
     res.json(recipes)
   } catch (err) {
     res.status(400).json({ message: "Not working!" })
