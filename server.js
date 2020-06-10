@@ -67,6 +67,8 @@ app.get('/secret', (req, res) => {
 
 //Trying to create recipes
 // New POST req - WORKING - rn only title and ingredients!
+app.post('/recipes', authenticateUser)
+
 app.post('/recipes', async (req, res) => {
   try {
     const { title, shortDescription, ingredients, directions, image, tags } = req.body

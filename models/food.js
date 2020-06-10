@@ -13,6 +13,7 @@ export const Recipe = mongoose.model('Recipe', {
   },
   ingredients: [{
       type: String,
+      required: true,
     }],
   directions: {
     type: String,
