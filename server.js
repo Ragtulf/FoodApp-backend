@@ -78,7 +78,7 @@ app.post('/recipes', async (req, res) => {
       ingredients,
       directions,
       image,
-      tags
+      tags,
     }).save()
     res.status(201).json(recipe)
   } catch (err) {
