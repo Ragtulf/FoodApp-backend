@@ -99,7 +99,7 @@ app.get('/recipes', async (req, res) => {
   }
 })
 
-app.get('/recipe/:id', async (req, res) => {
+app.get('/recipes/:id', async (req, res) => {
   const { id } = req.params
   try {
     const recipe = await Recipe.findById(id).populate({
