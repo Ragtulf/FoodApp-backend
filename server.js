@@ -79,6 +79,7 @@ app.post('/recipes', async (req, res) => {
       directions,
       image,
       tags,
+      createdBy: req.user._id
     }).save()
     res.status(201).json(recipe)
   } catch (err) {
@@ -88,7 +89,10 @@ app.post('/recipes', async (req, res) => {
 
 app.get('/recipes', async (req, res) => {
   try {
-    const recipes = await Recipe.find().sort({ createdAt:'desc' }).exec()
+    const recipes = await Recipe.find().sort({ createdAt:'desc' }).populate({
+      path: 'createdBy',
+    select: 'userName'
+    }).exec()
     res.json(recipes)
   } catch (err) {
     res.status(400).json({ message: "Not working!" })
@@ -98,7 +102,10 @@ app.get('/recipes', async (req, res) => {
 app.get('/recipe/:id', async (req, res) => {
   const { id } = req.params
   try {
-    const recipe = await Recipe.findById(id)
+    const recipe = await Recipe.findById(id).populate({
+      path: 'createdBy',
+    select: 'userName'
+    })
     res.json(recipe)
   } catch (err) {
     res.status(400).json({ message: 'Does not work!'})
