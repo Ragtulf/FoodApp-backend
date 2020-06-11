@@ -1,16 +1,43 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import dotenv from 'dotenv'
+import cloudinaryFramework from 'cloudinary'
+import multer from 'multer'
+import cloudinaryStorage from 'multer-storage-cloudinary'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt-nodejs'
 import { Recipe } from './models/food'
 import { User } from './models/users'
 
+dotenv.config()
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/food-app"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoUrl, 
+  { useNewUrlParser: true, 
+    useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+const cloudinary = cloudinaryFramework.v2; 
+cloudinary.config({
+  cloud_name: 'dpem2z8y9', // this needs to be whatever you get from cloudinary
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
+
+const storage = cloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'pets',
+    allowedFormats: ['jpg', 'png'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }],
+  },
+})
+const parser = multer({ storage })
+
+
+
+// Auth users
 const authenticateUser = async (req, res, next) => {
   const user = await User.findOne({ accessToken: req.header('Authorization')})
 
@@ -39,8 +66,8 @@ app.get('/', (req, res) => {
 
 app.post('/signup', async (req, res) => {
   try {
-    const { userName, email, password } = req.body
-    const user = new User({ userName, email, password: bcrypt.hashSync(password)})
+    const { userName, avatar, email, password } = req.body
+    const user = new User({ userName, avatar, email, password: bcrypt.hashSync(password)})
     const savedUser = await user.save()
     res.status(201).json({ id: savedUser._id, acesssToken: savedUser.accessToken })
   } catch (err) {
@@ -110,6 +137,10 @@ app.get('/recipes/:id', async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: 'Does not work!'})
   }
+})
+
+app.post('/image', parser.single('image'), async (req, res) => {
+	res.json({ imageUrl: req.file.path, imageId: req.file.filename})
 })
 
 // Start the server
