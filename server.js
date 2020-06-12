@@ -35,8 +35,6 @@ const storage = cloudinaryStorage({
 })
 const parser = multer({ storage })
 
-
-
 // Auth users
 const authenticateUser = async (req, res, next) => {
   const user = await User.findOne({ accessToken: req.header('Authorization')})
@@ -141,7 +139,10 @@ app.get('/recipes/:id', async (req, res) => {
 app.post('/recipes/:id/image', parser.single('image'), async (req, res) => {
   const { id } = req.params
   try {
-    const updatedRecipe = await Recipe.findOneAndUpdate({ _id: id },{ imageUrl: req.file.path, imageName: req.file.filename },{ new: true })
+    const updatedRecipe = await Recipe.findOneAndUpdate(
+      { _id: id },
+      { imageUrl: req.file.path, imageName: req.file.filename },
+      { new: true })
     res.json(updatedRecipe)
   } catch (err) {
     res.status(400).json({ message: "Can't post image" })
