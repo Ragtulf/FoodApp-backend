@@ -8,9 +8,15 @@ export const User = mongoose.model('User', {
     required: true,
     minlength: 2
   },
-  avatar: {
+  profilePic: {
     type: String,
   },
+  profilePicName: {
+    type: String
+  },
+  // avatar: {
+  //   type: String,
+  // },
   shortBio: {
     type: String,
     maxlength: 140,

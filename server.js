@@ -92,6 +92,19 @@ app.get('/login/user/:id', async (req, res) => {
   } 
 })
 
+app.post('/login/user/:id/image', parser.single('image'), async (req, res) => {
+  const { id } = req.params
+  try {
+    const userProfile = await User.findOneAndUpdate(
+      { _id: id },
+      { profilePic: req.file.path, profilePicName: req.file.filename },
+      { new: true })
+    res.json(userProfile)
+  } catch (err) {
+    res.status(400).json({ message: "Can't post profile pic" })
+  }
+})
+
 //Trying to create recipes
 app.post('/recipes', authenticateUser)
 
