@@ -20,7 +20,7 @@ mongoose.Promise = Promise
 
 const cloudinary = cloudinaryFramework.v2; 
 cloudinary.config({
-  cloud_name: 'dpem2z8y9', // this needs to be whatever you get from cloudinary
+  cloud_name: 'dnqxxs1yn',
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 })
@@ -28,7 +28,7 @@ cloudinary.config({
 const storage = cloudinaryStorage({
   cloudinary,
   params: {
-    folder: 'pets',
+    folder: 'recipeImages',
     allowedFormats: ['jpg', 'png'],
     transformation: [{ width: 500, height: 500, crop: 'limit' }],
   },
@@ -91,25 +91,23 @@ app.get('/secret', (req, res) => {
   res.json({ secret: "Welcome to the Secret!" })
 })
 
-
 //Trying to create recipes
-// New POST req - WORKING - rn only title and ingredients!
 app.post('/recipes', authenticateUser)
 
 app.post('/recipes', async (req, res) => {
   try {
-    const { title, shortDescription, ingredients, directions, image, tags } = req.body
+    const { title, shortDescription, ingredients, directions, tags } = req.body
     const recipe = await new Recipe({
       title,
       shortDescription,
       ingredients,
       directions,
-      image,
       tags,
       createdBy: req.user._id
     }).save()
     res.status(201).json(recipe)
   } catch (err) {
+    console.log(JSON.stringify(err))
     res.status(400).json({ message: 'Did not work!', error: err.errors })
   }
 })
@@ -139,8 +137,15 @@ app.get('/recipes/:id', async (req, res) => {
   }
 })
 
-app.post('/image', parser.single('image'), async (req, res) => {
-	res.json({ imageUrl: req.file.path, imageId: req.file.filename})
+// app.post('/recipes/:id/image', authenticateUser)
+app.post('/recipes/:id/image', parser.single('image'), async (req, res) => {
+  const { id } = req.params
+  try {
+    const updatedRecipe = await Recipe.findOneAndUpdate({ _id: id },{ imageUrl: req.file.path, imageName: req.file.filename },{ new: true })
+    res.json(updatedRecipe)
+  } catch (err) {
+    res.status(400).json({ message: "Can't post image" })
+  }
 })
 
 // Start the server

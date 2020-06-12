@@ -22,9 +22,12 @@ export const Recipe = mongoose.model('Recipe', {
   // time: {
   //   type: String,
   // },
-  // image: {
-  //   type: String,
-  // },
+  imageUrl: {
+    type: String,
+  },
+  imageName: {
+    type: String,
+  },
   tags: [{
       type: String,
       reqired: true,
