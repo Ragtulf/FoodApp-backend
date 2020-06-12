@@ -64,8 +64,8 @@ app.get('/', (req, res) => {
 
 app.post('/signup', async (req, res) => {
   try {
-    const { userName, avatar, email, password } = req.body
-    const user = new User({ userName, avatar, email, password: bcrypt.hashSync(password)})
+    const { userName, avatar, email, password, shortBio } = req.body
+    const user = new User({ userName, avatar, email, password: bcrypt.hashSync(password), shortBio })
     const savedUser = await user.save()
     res.status(201).json({ id: savedUser._id, acesssToken: savedUser.accessToken })
   } catch (err) {
@@ -80,13 +80,6 @@ app.post('/login', async (req, res) => {
   } else {
     res.status(400).json({ message: 'Could not find user' })
   }
-})
-
-//Authenticated endpoint
-app.get('/secret', authenticateUser)
-
-app.get('/secret', (req, res) => {
-  res.json({ secret: "Welcome to the Secret!" })
 })
 
 //Trying to create recipes
