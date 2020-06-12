@@ -82,6 +82,16 @@ app.post('/login', async (req, res) => {
   }
 })
 
+app.get('/login/user/:id', async (req, res) => {
+  const {id} = req.params
+  try {
+    const user = await User.findById(id)
+    res.status(201).json(user)
+  } catch (err) {
+    res.status(400).json({ message: 'No user found.'})
+  } 
+})
+
 //Trying to create recipes
 app.post('/recipes', authenticateUser)
 
