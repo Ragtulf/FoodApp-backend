@@ -64,7 +64,8 @@ app.get('/', (req, res) => {
 
 app.post('/signup', async (req, res) => {
   try {
-    const { userName, avatar, email, password, shortBio } = req.body
+    const { userName, email, password, shortBio } = req.body
+    const avatar = Math.floor(Math.random() * 16) +1
     const user = new User({ userName, avatar, email, password: bcrypt.hashSync(password), shortBio })
     const savedUser = await user.save()
     res.status(201).json({ id: savedUser._id, acesssToken: savedUser.accessToken })
@@ -90,6 +91,16 @@ app.get('/login/user/:id', async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: 'No user found.'})
   } 
+})
+
+app.get('/users/:id/recipes', async (req, res) => {
+  const { id } = req.params
+  try {
+    const userRecipes = await Recipe.find({ createdBy: id})
+    res.json(userRecipes)
+  } catch (err) {
+    res.status(400).json({ message: 'Does not work at all!'})
+  }
 })
 
 app.post('/login/user/:id/image', parser.single('image'), async (req, res) => {
@@ -130,7 +141,7 @@ app.get('/recipes', async (req, res) => {
   try {
     const recipes = await Recipe.find().populate({
       path: 'createdBy',
-      select: ['userName', 'profilePic']
+      select: ['userName', 'profilePic', 'avatar']
     }).sort({ createdAt:'desc' }).exec()
     res.json(recipes)
   } catch (err) {
@@ -143,7 +154,7 @@ app.get('/recipes/:id', async (req, res) => {
   try {
     const recipe = await Recipe.findById(id).populate({
       path: 'createdBy',
-    select: ['userName', 'profilePic']
+    select: ['userName', 'profilePic', 'avatar']
     })
     res.json(recipe)
   } catch (err) {

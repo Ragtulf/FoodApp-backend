@@ -14,9 +14,9 @@ export const User = mongoose.model('User', {
   profilePicName: {
     type: String
   },
-  // avatar: {
-  //   type: String,
-  // },
+  avatar: {
+    type: Number,
+  },
   shortBio: {
     type: String,
     maxlength: 140,
@@ -34,5 +34,9 @@ export const User = mongoose.model('User', {
   accessToken: {
     type: String,
     default: () => crypto.randomBytes(128).toString('hex')
+  },
+  recipes: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe',
   }
 })
