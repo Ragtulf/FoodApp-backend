@@ -130,7 +130,7 @@ app.get('/recipes', async (req, res) => {
   try {
     const recipes = await Recipe.find().populate({
       path: 'createdBy',
-    select: 'userName'
+      select: ['userName', 'profilePic']
     }).sort({ createdAt:'desc' }).exec()
     res.json(recipes)
   } catch (err) {
@@ -143,7 +143,7 @@ app.get('/recipes/:id', async (req, res) => {
   try {
     const recipe = await Recipe.findById(id).populate({
       path: 'createdBy',
-    select: 'userName'
+    select: ['userName', 'profilePic']
     })
     res.json(recipe)
   } catch (err) {
