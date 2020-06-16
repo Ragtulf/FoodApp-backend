@@ -93,6 +93,7 @@ app.get('/login/user/:id', async (req, res) => {
   } 
 })
 
+// Finds all recipes by specific user
 app.get('/users/:id/recipes', async (req, res) => {
   const { id } = req.params
   try {
