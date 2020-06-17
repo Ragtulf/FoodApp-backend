@@ -150,6 +150,21 @@ app.get('/recipes', async (req, res) => {
   }
 })
 
+app.get('/recipes/tags/:tag', async (req, res) => {
+  const { tag } = req.params
+  try {
+    const findTags = await Recipe.find({tags: { $regex: new RegExp(tag)}} )
+    if (findTags.length > 0) {
+      res.json(findTags)
+    } else {
+      res.status(400).json({ message: 'Not working'})
+    }
+  } catch (err) {
+    res.status(400).json({ message: 'No tags'})
+  }
+})
+
+
 app.get('/recipes/:id', async (req, res) => {
   const { id } = req.params
   try {
