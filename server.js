@@ -153,7 +153,10 @@ app.get('/recipes', async (req, res) => {
 app.get('/recipes/tags/:tag', async (req, res) => {
   const { tag } = req.params
   try {
-    const findTags = await Recipe.find({tags: { $regex: new RegExp(tag)}} )
+    const findTags = await Recipe.find({tags: { $regex: new RegExp(tag)}}).populate({
+      path: 'createdBy',
+      select: ['userName', 'profilePic', 'avatar']
+    })
     if (findTags.length > 0) {
       res.json(findTags)
     } else {
