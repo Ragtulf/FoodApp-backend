@@ -153,7 +153,8 @@ app.get('/recipes', async (req, res) => {
 app.get('/recipes/tags/:tag', async (req, res) => {
   const { tag } = req.params
   try {
-    const findTags = await Recipe.find({tags: { $regex: new RegExp(tag)}}).populate({
+    const findTags = await Recipe.find({tags: { $regex: new RegExp(tag, 'i')}})
+    .populate({
       path: 'createdBy',
       select: ['userName', 'profilePic', 'avatar']
     })
@@ -166,7 +167,11 @@ app.get('/recipes/tags/:tag', async (req, res) => {
     res.status(400).json({ message: 'No tags'})
   }
 })
-
+// const showNominations = await Nomination.find({
+//   category: new RegExp(category, 'i'),
+//   nominee: new RegExp(nominee, 'i'),
+//   film: new RegExp(film, 'i'),
+// })
 
 app.get('/recipes/:id', async (req, res) => {
   const { id } = req.params
