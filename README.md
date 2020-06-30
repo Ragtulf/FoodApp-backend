@@ -1,6 +1,6 @@
 # o! Food Community - Final Project - Backend 🌟🍔🏅
 
-This is a ToDo app website that shows how many tasks you have completed and out of how many. You can add a task, delete a task and clear the list. It has some tasks in there to show how it looks when it is not empty. 
+An online platform to look at, share and collect recipes. It is a web application that can be viewed both on desktop and in mobile.
 
 ## Tech
 
