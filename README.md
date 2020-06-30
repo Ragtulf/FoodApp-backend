@@ -23,10 +23,14 @@ This is a ToDo app website that shows how many tasks you have completed and out 
   * /users/:id/recipes – *Gets all recipes by a specific user*
 
 - POST requests
-  * /recipes *Posts a recipe to database*
-  * /recipes/:id/image *Connects image to recipe*
-  * /signup *Adds new user*
-  * /login *Login for a user*
+  * /recipes 
+*Posts a recipe to database*
+  * /recipes/:id/image 
+*Connects image to recipe*
+  * /signup 
+*Adds new user*
+  * /login 
+*Login for a user*
   * /login/user/:id/image *Connects profile pic to user*
 
 ## How we did it
