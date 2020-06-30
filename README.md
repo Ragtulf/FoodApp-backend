@@ -37,3 +37,5 @@ We started with trying to visualize the models we needed in the backend and then
 
 The final product can be viewed here👀🌶: 
 https://o-food-community.netlify.app/
+The API is here:
+https://grymt-food-app.herokuapp.com
