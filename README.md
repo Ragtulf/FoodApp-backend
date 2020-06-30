@@ -16,11 +16,11 @@ This is a ToDo app website that shows how many tasks you have completed and out 
 ## Documentation
 
 - GET requests
-  * /recipes *Gets all recipes*
-  * /recipes/:id *Gets a specific recipe*
-  * /recipes/tags/:tag *Gets all recipes with a specific tag*
-  * /login/user/:id *Gets specific user profile*
-  * /users/:id/recipes *Gets all recipes by a specific user*
+  * /recipes – *Gets all recipes*
+  * /recipes/:id – *Gets a specific recipe*
+  * /recipes/tags/:tag – *Gets all recipes with a specific tag*
+  * /login/user/:id – *Gets specific user profile*
+  * /users/:id/recipes – *Gets all recipes by a specific user*
 
 - POST requests
   * /recipes *Posts a recipe to database*
