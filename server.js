@@ -18,6 +18,7 @@ mongoose.connect(mongoUrl,
     useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+// Cloudinary to store images
 const cloudinary = cloudinaryFramework.v2; 
 cloudinary.config({
   cloud_name: 'dnqxxs1yn',
@@ -35,7 +36,7 @@ const storage = cloudinaryStorage({
 })
 const parser = multer({ storage })
 
-// Auth users
+// Authentication for users
 const authenticateUser = async (req, res, next) => {
   const user = await User.findOne({ accessToken: req.header('Authorization')})
 
@@ -46,22 +47,21 @@ const authenticateUser = async (req, res, next) => {
     res.status(403).json({ message: 'Access forbidden!' })
   }
 }
-// Defines the port the app will run on. Defaults to 8080, but can be 
-// overridden when starting the server. For example:
-//
-//   PORT=9000 npm start
+
+// Port
 const port = process.env.PORT || 8080
 const app = express()
 
-// Add middlewares to enable cors and json body parsing
+// Middleware
 app.use(cors())
 app.use(bodyParser.json())
 
-// Start defining your routes here
+// Routes
 app.get('/', (req, res) => {
   res.send('Our pretty Food App! 🍌')
 })
 
+// Signup
 app.post('/signup', async (req, res) => {
   try {
     const { userName, email, password, shortBio } = req.body
@@ -74,6 +74,7 @@ app.post('/signup', async (req, res) => {
   }
 })
 
+// Login
 app.post('/login', async (req, res) => {
   const user = await User.findOne({ userName: req.body.userName })
   if (user && bcrypt.compareSync(req.body.password, user.password)) {
@@ -83,6 +84,7 @@ app.post('/login', async (req, res) => {
   }
 })
 
+// A specific user profile page
 app.get('/login/user/:id', async (req, res) => {
   const {id} = req.params
   try {
@@ -104,6 +106,7 @@ app.get('/users/:id/recipes', async (req, res) => {
   }
 })
 
+// Add profile pic to user model
 app.post('/login/user/:id/image', parser.single('image'), async (req, res) => {
   const { id } = req.params
   try {
@@ -117,9 +120,8 @@ app.post('/login/user/:id/image', parser.single('image'), async (req, res) => {
   }
 })
 
-// Creating recipes
+// Create recipe (needs authentication)
 app.post('/recipes', authenticateUser)
-
 app.post('/recipes', async (req, res) => {
   try {
     const { title, shortDescription, ingredients, directions, tags } = req.body
@@ -138,6 +140,7 @@ app.post('/recipes', async (req, res) => {
   }
 })
 
+// Lists recipes for feed
 app.get('/recipes', async (req, res) => {
   try {
     const recipes = await Recipe.find().populate({
@@ -150,6 +153,7 @@ app.get('/recipes', async (req, res) => {
   }
 })
 
+// Lists recipes by tag search
 app.get('/recipes/tags/:tag', async (req, res) => {
   const { tag } = req.params
   try {
@@ -168,6 +172,7 @@ app.get('/recipes/tags/:tag', async (req, res) => {
   }
 })
 
+// GET a specific recipe
 app.get('/recipes/:id', async (req, res) => {
   const { id } = req.params
   try {
@@ -181,7 +186,7 @@ app.get('/recipes/:id', async (req, res) => {
   }
 })
 
-// app.post('/recipes/:id/image', authenticateUser)
+// Add image to a specific recipe
 app.post('/recipes/:id/image', parser.single('image'), async (req, res) => {
   const { id } = req.params
   try {
@@ -195,7 +200,7 @@ app.post('/recipes/:id/image', parser.single('image'), async (req, res) => {
   }
 })
 
-// Start the server
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })

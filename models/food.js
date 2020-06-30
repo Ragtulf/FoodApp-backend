@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 
-// Working model with arrays
 export const Recipe = mongoose.model('Recipe', {
   title: {
     type: String,
@@ -19,9 +18,6 @@ export const Recipe = mongoose.model('Recipe', {
     type: String,
     required: true,
   },
-  // time: {
-  //   type: String,
-  // },
   imageUrl: {
     type: String,
   },
